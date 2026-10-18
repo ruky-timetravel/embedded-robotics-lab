@@ -1,0 +1,34 @@
+# Compiler outputs
+/build/
+*.o
+*.obj
+*.exe
+*.out
+*.a
+*.so
+*.dll
+core
+core.*
+
+# Local Python environments
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local settings and credentials
+.vscode/
+.idea/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials.json
+
+# OS and editor artifacts
+.DS_Store
+Thumbs.db
+*.swp
+*~
