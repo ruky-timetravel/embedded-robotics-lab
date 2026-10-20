@@ -1,5 +1,6 @@
 # 学习文档
 
+- [ROS 2 视频学习、第一课与日志](ros2/README.md)
 - [Linux 与 VMware 环境配置](linux-setup.md)
 - [Linux 起步的 16 周路线与项目验收](roadmap.md)
 - [学习进度与实际证据](progress.md)
