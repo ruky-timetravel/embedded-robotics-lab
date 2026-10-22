@@ -1,10 +1,10 @@
 # 第二章 Python 排错记录：模块、功能包与入口配置
 
-[本章入口](README.md) · [功能包源码](demo_python_pkg/) · [成功截图](images/python-node-success.png)
+[本章入口](README.md) · [功能包源码](chapt2_ws/src/demo_python_pkg/) · [成功截图](images/python-node-success.png)
 
-本页记录 Python 包排错。后续 C++ 包的命令拼写、Lyrical 依赖宏、安装关键字及运行成功记录见 [CPP_NODE.md](CPP_NODE.md)。
+本页记录 Python 包排错。第 1—6 节命令保留早期工作空间布局，当前运行命令以 [章节入口](README.md)为准。后续 C++ 包的命令拼写、Lyrical 依赖宏、安装关键字及运行成功记录见 [CPP_NODE.md](CPP_NODE.md)。
 
-早期排查先修复源码位置与入口，再核对构建目录、安装索引和环境，最终通过修正 `package.xml` 的 XML 闭合标签恢复 ROS 2 包识别；当前上传的早期源码已包含这些修正。后续新工作空间中新增入口漏逗号的问题见第 7 节，以截图和配置片段归档，新版完整源码仍待同步。
+早期排查先修复源码位置与入口，再核对构建目录、安装索引和环境，最终通过修正 `package.xml` 的 XML 闭合标签恢复 ROS 2 包识别；当前上传的早期源码已包含这些修正。后续新工作空间中新增入口漏逗号的问题见第 7 节，以截图和配置片段归档，新版完整源码现已同步到 chapt2_ws/src，后续运行记录见 [OOP_NODES.md](OOP_NODES.md)。
 
 ## 1. 启动脚本存在，但 Python 模块找不到
 
@@ -40,7 +40,7 @@ demo_python_pkg/                       ← ROS 2 功能包目录
 'python_node = demo_python_pkg.python_node:main'
 ```
 
-左侧是可执行入口名；右侧是 `模块:函数`。当前代码见 [setup.py](demo_python_pkg/setup.py) 和 [python_node.py](demo_python_pkg/demo_python_pkg/python_node.py)。应修改源码并重新构建，安装目录里的启动脚本由构建生成。
+左侧是可执行入口名；右侧是 `模块:函数`。当前代码见 [setup.py](chapt2_ws/src/demo_python_pkg/setup.py) 和 [python_node.py](chapt2_ws/src/demo_python_pkg/demo_python_pkg/python_node.py)。应修改源码并重新构建，安装目录里的启动脚本由构建生成。
 
 ## 2. 在安装目录构建，发现 0 个包
 
@@ -127,7 +127,7 @@ printf 'AMENT_PREFIX_PATH=%s\n' "$AMENT_PREFIX_PATH"
 </export>
 ```
 
-原始配置全图见[配置检查截图](images/python-package-config.png)，当前修正版见 [package.xml](demo_python_pkg/package.xml)。修改并保存后，重新运行：
+原始配置全图见[配置检查截图](images/python-package-config.png)，当前修正版见 [package.xml](chapt2_ws/src/demo_python_pkg/package.xml)。修改并保存后，重新运行：
 
 ```bash
 cd ~/embedded-learning/CHAPT2
@@ -237,12 +237,12 @@ source install/setup.bash
 ros2 run demo_python_pkg person_node
 ```
 
-以上根目录复测和 `person_node` 启动仍待记录实际结果。本轮确认的是补逗号后构建成功，尚未取得该新增入口的运行输出。若入口为 `demo_python_pkg.person_node:main`，对应源码应位于内层 `src/demo_python_pkg/demo_python_pkg/person_node.py`，并提供 `main()`。
+后续已完成根目录诊断、模块位置修复和 person_node 启动，见 [后续排错与成功截图](OOP_NODES.md)。本节截图仅对应当时补逗号后构建成功的阶段。若入口为 `demo_python_pkg.person_node:main`，对应源码应位于内层 `src/demo_python_pkg/demo_python_pkg/person_node.py`，并提供 `main()`。
 
-当前仓库保存早期功能包源码；新工作空间中新增的 `person_node.py` 和完整配置尚未同步。本节保留截图与关键片段，不将其作为完整源码副本。
+新工作空间中 person_node.py、writer_node.py 与完整包配置现已归档到 chapt2_ws/src。本节保留当时截图与关键片段；当前源码及单条日志设计见 [OOP_NODES.md](OOP_NODES.md)。
 
 ## 结果与尚未覆盖的内容
 
 `INFO` 和黄色 `WARN` 都来自本章源码主动输出。节点随后进入 `rclpy.spin(node)`，等待事件；它没有定时器，不会周期性打印。按 `Ctrl+C` 可停止。
 
-本次已验证 Python 功能包在学习者 Ubuntu 环境中启动成功，证据为上方真实终端截图。后续 C++ 包也已构建运行成功，见 [C++ 排错与验收](CPP_NODE.md)。上传源码以实际收到的当前文件为准，排错截图保留修复前后状态；新 C++ 包完整源码仍待同步。
+本次已验证 Python 功能包在学习者 Ubuntu 环境中启动成功，证据为上方真实终端截图。后续 C++ 包也已构建运行成功，见 [C++ 排错与验收](CPP_NODE.md)。上传源码以实际收到的当前文件为准，排错截图保留修复前后状态；C++ 新包完整源码现已归档。

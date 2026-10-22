@@ -24,9 +24,9 @@ ros2 run demo_cpp_pkg cpp_node
 
 ## 源码归档状态
 
-本仓库已有早期独立示例 [ros2_cpp_node.cpp](ros2_cpp_node.cpp) 和 [CMakeLists.txt.back](CMakeLists.txt.back)。本次运行的 `demo_cpp_pkg/src/cpp_node.cpp`、完整 `CMakeLists.txt` 与 `package.xml` 尚未同步到学习者此前提供的源码归档目录，因此这里保留实际截图、命令及关键配置，不将早期独立示例视为本次新包的完整源码副本。
+两个功能包的完整源码已归档到 [chapt2_ws/src](chapt2_ws/src/)。C++ 源码见 [cpp_node.cpp](chapt2_ws/src/demo_cpp_pkg/src/cpp_node.cpp)、[CMakeLists.txt](chapt2_ws/src/demo_cpp_pkg/CMakeLists.txt)与 [package.xml](chapt2_ws/src/demo_cpp_pkg/package.xml)。归档时补齐清单中的 rclcpp 依赖；旧独立示例与备份继续保留。
 
-以下工作空间命令用于学习者 Ubuntu 中已有的 `demo_cpp_pkg`；从 GitHub 新克隆仓库时，还需要补齐该包完整源码才能复现 C++ 包构建。
+本页错误截图中的旧工作空间路径作为历史保留。当前构建目录为 CHAPT2/chapt2_ws，完整复现步骤见 [本章入口](README.md)。
 
 ## 排错过程
 
@@ -116,7 +116,7 @@ install(TARGETS cpp_node
 )
 ```
 
-功能包的文件末尾保留 `ament_package()`。`lib/${PROJECT_NAME}` 将可执行程序安装到包对应的目录，供 `ros2 run` 查找。这里展示的是关键配置片段，完整源文件仍待归档。
+功能包的文件末尾保留 `ament_package()`。`lib/${PROJECT_NAME}` 将可执行程序安装到包对应的目录，供 `ros2 run` 查找。这里展示的是关键配置片段，完整源文件已在 chapt2_ws/src 归档。
 
 同次构建中的 Python 包显示 `Aborted`；该画面明确报告的配置错误来自 C++ 包。修正后再次构建，两个包均完成。
 
@@ -125,7 +125,7 @@ install(TARGETS cpp_node
 在包含两个功能包的工作空间根目录执行：
 
 ```bash
-cd ~/embedded-learning/CHAPT2
+cd ~/embedded-learning/CHAPT2/chapt2_ws
 source /opt/ros/lyrical/setup.bash
 colcon build
 source install/setup.bash
@@ -144,4 +144,4 @@ ros2 run demo_cpp_pkg cpp_node
 - 安装配置：`install(TARGETS ...)` 使用复数关键字，并指定包对应的安装目录。
 - 验收顺序：配置 → 编译 → 工作空间构建与安装 → 包发现 → 节点运行，分别保留证据。
 
-下一步补齐新 C++ 包的完整源码归档，并开始发布者与订阅者实验。当前成功结果为日志节点启动，不扩展为通信、机械臂或模型推理成果。
+C++ 包完整源码现已归档；下一步复测依赖声明并开始发布者与订阅者实验。当前成功结果为日志节点启动，不扩展为通信、机械臂或模型推理成果。

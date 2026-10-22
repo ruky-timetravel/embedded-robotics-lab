@@ -11,7 +11,7 @@
 | 章节 | 内容与文件 | 排错与实验记录 | 当前结果 |
 | --- | --- | --- | --- |
 | [第一章：Ubuntu、编程与 ROS 2 初体验](CHAPT1/README.md) | C/C++、Python 最小程序、CMake、小海龟与节点图 | [排错过程](CHAPT1/TROUBLESHOOTING.md) · [Ubuntu 实验与截图](CHAPT1/EVIDENCE.md) | 已观察小海龟与节点图，CMake 配置已修正；C++ 构建验收待补 |
-| [第二章：ROS 2 C++ / Python 节点与功能包](CHAPT2/README.md) | `rclpy`、`rclcpp`、包结构、入口配置、CMake、colcon 与环境加载 | [Python 排错](CHAPT2/TROUBLESHOOTING.md) · [C++ 排错与截图](CHAPT2/CPP_NODE.md) | Python、C++ 包均已构建并启动；C++ 新包完整源码待同步 |
+| [第二章：ROS 2 C++ / Python 节点与功能包](CHAPT2/README.md) | `rclpy`、`rclcpp`、包结构、入口配置、CMake、colcon 与环境加载 | [Python 排错](CHAPT2/TROUBLESHOOTING.md) · [C++ 排错与截图](CHAPT2/CPP_NODE.md) · [类与日志实验](CHAPT2/OOP_NODES.md) | Python、C++ 包均已构建并启动；C++ / Python 新工作空间源码已归档 |
 
 首页只提供章节入口，截图在各章说明和排错记录内查看。
 
@@ -21,9 +21,10 @@
 - 已收录第一章最小程序与第二章节点、Python 功能包的实际源码。
 - Python 包已识别为 `ros.ament_python`，构建完成，并成功输出 `INFO`、`WARN` 两条“你好”日志。
 - C++ 包 `demo_cpp_pkg` 已通过构建、安装前缀查询及 `ros2 run`，节点输出 `[cpp_node]: 你好`。
+- 已归档 chapt2_ws 中两个完整功能包，以及 PersonNode / WriterNode 的继承、作用域与日志组合练习。
 - 已记录 CMake 拼写、Python 模块路径、入口配置、构建目录、ament 索引、环境脚本及 XML 标签等排错过程。
 
-后续同步新 C++ 包的完整源码，继续发布/订阅、服务、参数和 Launch 练习。小海龟实际运动与速度消息样本也继续补入第一章。
+已同步两个功能包与人物类源码，后续继续发布/订阅、服务、参数和 Launch 练习。小海龟实际运动与速度消息样本也继续补入第一章。
 
 ## 使用仓库
 

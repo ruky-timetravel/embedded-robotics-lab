@@ -7,7 +7,7 @@
 | 章节 | 内容与材料 | 当前证据 |
 | --- | --- | --- |
 | [CHAPT1：Ubuntu、编程与 ROS 2 初体验](../../CHAPT1/README.md) | C/C++、Python、CMake；[小海龟实验](../../CHAPT1/TURTLESIM.md)；[Ubuntu 截图](../../CHAPT1/EVIDENCE.md)；[排错记录](../../CHAPT1/TROUBLESHOOTING.md) | 已看到 TurtleSim 窗口与节点图；保留 CMake 拼写错误截图，尚未补充当前源码完整构建验收截图 |
-| [CHAPT2：C++ / Python 节点与功能包](../../CHAPT2/README.md) | `rclpy`、`rclcpp`、日志、包目录、入口、CMake 与 `colcon`；[Python 排错](../../CHAPT2/TROUBLESHOOTING.md) · [C++ 排错与截图](../../CHAPT2/CPP_NODE.md) | Python 包识别与启动已确认；C++ 包也已编译、安装并通过 `ros2 run` 打印日志，新包完整源码待同步 |
+| [CHAPT2：C++ / Python 节点与功能包](../../CHAPT2/README.md) | `rclpy`、`rclcpp`、日志、包目录、入口、CMake 与 `colcon`；[Python 排错](../../CHAPT2/TROUBLESHOOTING.md) · [C++ 排错与截图](../../CHAPT2/CPP_NODE.md) | Python 包识别与启动已确认；C++ 包也已编译、安装并通过 `ros2 run` 打印日志，完整源码已归档 |
 
 ## 从当前结果继续
 
@@ -41,3 +41,5 @@ source /opt/ros/lyrical/setup.bash
 - [Lyrical 官方 TurtleSim 教程源文件](https://github.com/ros2/ros2_documentation/blob/lyrical/source/Get-Started/Introducing-Turtlesim/Introducing-Turtlesim.rst)
 
 笔记由 AI 辅助整理，源码和截图来自学习过程。运行结果、待实践内容和未来目标按各章证据分别标注。
+
+人物类、继承、初始化和日志组合的完整过程见 [第二章类与节点记录](../../CHAPT2/OOP_NODES.md)。最终复用父类的单条日志版本已做本地逻辑检查，Ubuntu 复测截图待补。

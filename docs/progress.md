@@ -19,9 +19,10 @@
 | [CHAPT1：TurtleSim](../CHAPT1/TURTLESIM.md) | [Ubuntu 与节点图截图](../CHAPT1/EVIDENCE.md)显示海龟窗口、键盘控制提示和 `/turtle1/cmd_vel` 连接 | 部分确认；运动操作、实际速度/位姿消息及其解释尚未保存 |
 | [CHAPT2：Python 节点与功能包](../CHAPT2/README.md) | [成功截图](../CHAPT2/images/python-node-success.png)显示 `(ros.ament_python)`、`1 package finished` 及 `ros2 run` 输出 INFO/WARN“你好” | 运行已确认；当前功能为创建节点和打印日志，尚未实现话题通信 |
 | [CHAPT2：Python 包排错](../CHAPT2/TROUBLESHOOTING.md) | 模块未找到、入口和目录检查、包识别诊断、XML 标签修正与最终复测截图 | 从故障到启动成功的过程已记录；黄色 WARN 来自示例主动输出 |
-| [CHAPT2：新增 person_node 入口](../CHAPT2/TROUBLESHOOTING.md#7-新增-person_node-入口时漏写逗号) | 学习者定位入口列表漏逗号；修复截图显示 `1 package finished` | 包目录内构建成功；工作空间根目录复测、入口运行与新源码同步待补 |
-| [CHAPT2：C++ 功能包与节点](../CHAPT2/CPP_NODE.md) | 6 张截图记录 CMake 错误、配置和编译成功、安装修正、两个包构建完成、包前缀及 `ros2 run` 输出“你好” | 构建与运行已确认；已有早期独立源码，新建 `demo_cpp_pkg` 完整源码待同步 |
+| [CHAPT2：新增 person_node 入口](../CHAPT2/TROUBLESHOOTING.md#7-新增-person_node-入口时漏写逗号) | 学习者定位入口列表漏逗号；修复截图显示 `1 package finished` | 包目录内构建成功；后续根目录复测、模块位置修复与 ROS 节点运行已确认，详见人物类记录 |
+| [CHAPT2：C++ 功能包与节点](../CHAPT2/CPP_NODE.md) | 6 张截图记录 CMake 错误、配置和编译成功、安装修正、两个包构建完成、包前缀及 `ros2 run` 输出“你好” | 构建与运行已确认；完整源码已归档至 chapt2_ws/src/demo_cpp_pkg，清单补齐 rclcpp 依赖 |
 | 后续 ROS 2 通信 | 发布/订阅、服务、参数、Launch | 待完成 |
+| [CHAPT2：WriterNode 继承与日志](../CHAPT2/OOP_NODES.md) | 父类初始化、重写 eat 的单条日志与直接继承 eat 的两条日志均有运行截图 | 最终复用父类的单条完整日志方案已实现并通过本地逻辑检查；Ubuntu 复测待补 |
 
 ## 当前环境
 
@@ -54,7 +55,7 @@
 | 方向 | 下一项可验证成果 | 状态 |
 | --- | --- | --- |
 | ROS 2 基础通信 | 自建发布者与订阅者，记录消息类型、频率和实际输出 | 待完成 |
-| C++ 工程化 | 同步新建 `demo_cpp_pkg` 的完整源码，再补充修改与通信实验 | 包构建、安装与启动已确认；源码归档待补 |
+| C++ 工程化 | 在已归档功能包基础上补充修改与通信实验 | 包构建、安装与启动已确认；完整源码已归档 |
 | 机械臂基础 | TF2、URDF/Xacro、正逆运动学、关节与末端坐标关系 | 待完成 |
 | 机械臂操作 | 核对 MoveIt 2、ros2_control 与仿真环境兼容，完成抓取放置实验 | 待完成 |
 | 示教与模仿学习 | 检查图像、状态、动作、语言及时间戳，完成行为克隆或 ACT 基线 | 待完成 |
@@ -69,3 +70,5 @@
 新增内容先确定章节，再把源码、运行步骤、排错和截图放在该章节下。使用 [章节记录模板](chapter-record-template.md)；截图采用 `python-node-success.png` 等内容名称，不按日期建立学习分类。
 
 没有执行的测试标为“未执行”，没有保存的结果标为“未记录”。保留失败过程与复测依据，只有实际验证后才更新完成状态。
+
+人物类、继承、初始化和日志组合的完整过程见 [第二章类与节点记录](../CHAPT2/OOP_NODES.md)。最终复用父类的单条日志版本已做本地逻辑检查，Ubuntu 复测截图待补。

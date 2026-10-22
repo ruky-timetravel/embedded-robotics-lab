@@ -9,14 +9,14 @@
 | 章节 | 源码、实验与排错 | 当前结果 |
 | --- | --- | --- |
 | CHAPT1 | [本章入口](../../CHAPT1/README.md) · [TurtleSim](../../CHAPT1/TURTLESIM.md) · [环境截图](../../CHAPT1/EVIDENCE.md) · [排错](../../CHAPT1/TROUBLESHOOTING.md) | 已有编程源码、小海龟窗口和节点图；保留 CMake 报错过程，当前源码完整重跑证据待补 |
-| CHAPT2 | [本章入口](../../CHAPT2/README.md) · [Python 排错](../../CHAPT2/TROUBLESHOOTING.md) · [C++ 排错与截图](../../CHAPT2/CPP_NODE.md) | Python 与 C++ 包构建、发现和 `ros2 run` 日志输出均已确认；新建 C++ 包完整源码待同步 |
+| CHAPT2 | [本章入口](../../CHAPT2/README.md) · [Python 排错](../../CHAPT2/TROUBLESHOOTING.md) · [C++ 排错与截图](../../CHAPT2/CPP_NODE.md) | Python 与 C++ 包构建、发现和 `ros2 run` 日志输出均已确认；两个功能包源码已归档 |
 
 ## 已有证据
 
 - 当前终端 `printenv ROS_DISTRO` 输出 `lyrical`。
 - 已看到 TurtleSim 窗口和 `rqt_graph` 中的 `/teleop_turtle`、`/turtlesim`、`/turtle1/cmd_vel` 连接。
 - Python 功能包已被识别为 `ros.ament_python`，构建结束于 `1 package finished`，`ros2 run` 成功打印 INFO/WARN“你好”，证据见 [CHAPT2 运行截图](../../CHAPT2/images/python-node-success.png)。
-- C++ 包已完成 CMake 配置、编译与安装修复，最终两个包构建完成，`ros2 run demo_cpp_pkg cpp_node` 打印“你好”，见 [C++ 实验与截图](../../CHAPT2/CPP_NODE.md)。新包完整源码尚待同步；小海龟的键盘运动、实际消息样本和概念解释仍待记录。
+- C++ 包已完成 CMake 配置、编译与安装修复，最终两个包构建完成，`ros2 run demo_cpp_pkg cpp_node` 打印“你好”，见 [C++ 实验与截图](../../CHAPT2/CPP_NODE.md)。新包完整源码现已归档；小海龟的键盘运动、实际消息样本和概念解释仍待记录。
 - Ubuntu 具体版本和环境加载路径需补充实际输出。
 
 ## 分阶段计划
@@ -25,11 +25,11 @@
 |---|---|---|---|
 | 0 | 核对现有 Ubuntu、Lyrical 和仓库记录方式 | 保存环境信息，能在新终端加载同一环境 | 部分确认，版本与路径记录待补 |
 | 1 | 视频 1.3：TurtleSim、节点、包、话题、消息 | 控制海龟运动，观察 `cmd_vel` 和 `pose`，能解释节点图 | 进行中，已观察到启动和图，实际操作待验收 |
-| 2 | `rclpy` / `rclcpp`、工作空间、`ament_python` / `ament_cmake`、`colcon` | 自建包、运行节点，再完成发布者与订阅者，能修改消息或发布频率 | Python 与 C++ 日志节点均已运行；新 C++ 包源码归档和通信实验待完成 |
+| 2 | `rclpy` / `rclcpp`、工作空间、`ament_python` / `ament_cmake`、`colcon` | 自建包、运行节点，再完成发布者与订阅者，能修改消息或发布频率 | Python 与 C++ 日志节点均已运行；两个包源码已归档，通信实验待完成 |
 | 3 | 用 C++ 节点控制 TurtleSim | 发布 `Twist`、订阅位姿，完成一个可重复的简单控制实验 | 待开始 |
 | 4 | 在已有小实验上学习 Service、参数和 Launch | 调用一次服务、修改一个参数，并用启动文件复现实验 | 待开始 |
 
-节点和环境变量实践见 [CHAPT2](../../CHAPT2/README.md)。可对照 [1.4.5 环境变量](https://www.bilibili.com/video/BV1pm42137bR/)与 [2.1.2 编写你的第一个节点 C++ 示例](https://www.bilibili.com/video/BV1FH4y1c7Px/)复盘，后续同步 C++ 新包源码并进入发布/订阅通信实验。
+节点和环境变量实践见 [CHAPT2](../../CHAPT2/README.md)。可对照 [1.4.5 环境变量](https://www.bilibili.com/video/BV1pm42137bR/)与 [2.1.2 编写你的第一个节点 C++ 示例](https://www.bilibili.com/video/BV1FH4y1c7Px/)复盘，后续进入发布/订阅通信实验。
 
 ## 机械臂与具身智能拓展目标
 

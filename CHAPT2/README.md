@@ -1,189 +1,103 @@
 # 第二章：ROS 2 C++ / Python 节点与功能包
 
-[返回仓库首页](../README.md) · [返回第一章](../CHAPT1/README.md) · [Python 排错](TROUBLESHOOTING.md) · [C++ 构建、排错与运行](CPP_NODE.md)
+[首页](../README.md) · [第一章](../CHAPT1/README.md) · [Python 包排错](TROUBLESHOOTING.md) · [C++ 实验](CPP_NODE.md) · [类、继承与日志排错](OOP_NODES.md)
 
-本章从直接运行节点开始，将 Python 与 C++ 节点封装为 ROS 2 功能包，通过 `colcon build` 构建并使用 `ros2 run` 启动。学习重点是源码目录、Python 导入入口、CMake 依赖与安装配置、ROS 2 包注册和终端环境之间的关系。
+本章记录节点创建、功能包构建、Python 类与继承、ROS 2 初始化及日志输出。源码统一放在 `chapt2_ws/src`，截图和排错留在本章，按内容持续补充。
 
-## 已完成的实验
+## 已有结果与验证边界
 
-早期 `python_node` 的终端截图确认：
+- Python 日志节点与 C++ 节点已由 Ubuntu 截图确认构建和启动成功。
+- `person_node` 从普通 Python 类示例推进到继承 `rclpy.node.Node`，成功输出节点日志并进入 spin。
+- `writer_node` 已验证父类初始化、方法重写和直接继承父类 `eat()`。历史截图分别展示重写版本的一条完整日志，以及直接继承版本的两条日志。
+- 本次按最后要求实现“复用父类 eat、输出一条完整日志”：父类支持返回文本，子类不重写 eat，最后统一输出。此修改已进行本地逻辑检查；该版本的 Ubuntu/ROS 2 运行截图仍待补充。
+- C++ 包清单补充 `rclcpp` 依赖，避免依赖解析只依靠本机已经安装的库。
 
-- `colcon list` 将 `demo_python_pkg` 识别为 `ros.ament_python`。
-- `colcon build --packages-select demo_python_pkg` 显示 `1 package finished`。
-- 加载 `install/setup.bash` 后，`ros2 run demo_python_pkg python_node` 成功输出 `INFO` 与 `WARN` 两条“你好”日志。
+早期 Python 包运行证据：
 
-![Python 功能包识别、构建与节点运行成功](images/python-node-success.png)
+![Python 节点启动成功](images/python-node-success.png)
 
-黄色 `WARN` 是源码主动调用 `warning('你好')` 的结果，不能据此判断节点启动失败。日志打印一次之后，程序进入 `rclpy.spin(node)` 等待事件，不会自动重复打印。
+## 源码导航
 
-随后已完成 C++ 功能包的构建与运行：`colcon build` 显示 `demo_cpp_pkg`、`demo_python_pkg` 两个包完成，`ros2 pkg prefix demo_cpp_pkg` 返回工作空间安装前缀，`ros2 run demo_cpp_pkg cpp_node` 输出 `[cpp_node]: 你好`。详见 [C++ 实验、排错与成功截图](CPP_NODE.md)。
-
-后续在 `chapt2_ws` 中新增 `person_node` 入口时，已定位并修复 `console_scripts` 列表漏逗号的问题，截图确认重新构建成功。新增入口的运行结果尚待记录，见 [入口逗号排错与工作空间说明](TROUBLESHOOTING.md#7-新增-person_node-入口时漏写逗号)。该新工作空间的完整源码尚未同步，下面的已归档目录结构仍为早期版本。
-
-## 学习要点
-
-- `rclpy.init()` 初始化 ROS 2，`Node('python_node')` 创建节点，`get_logger()` 输出日志。
-- `rclpy.spin(node)` 让节点处理回调和事件；当前示例尚未创建发布者、订阅者或定时器。
-- 外层 `demo_python_pkg/` 是 ROS 2 功能包目录，内层同名目录是 Python 可导入的包。
-- `setup.py` 的入口将命令名映射到 `模块:函数`；`package.xml` 声明包信息、依赖与构建类型。
-- 构建成功、包能被 ROS 2 发现、Python 模块能被导入，是需要分别确认的环节。
-
-## 文件导航
-
-| 文件 | 作用 |
+| 文件 | 内容 |
 | --- | --- |
-| [ros2_python_node.py](ros2_python_node.py) | 可直接用 `python3` 执行的节点示例，带 `__main__` 入口判断 |
-| [demo_python_pkg/demo_python_pkg/python_node.py](demo_python_pkg/demo_python_pkg/python_node.py) | 安装为功能包的节点实现，提供 `main()` |
-| [demo_python_pkg/setup.py](demo_python_pkg/setup.py) | Python 包发现、ROS 2 注册文件安装与 `console_scripts` 入口 |
-| [demo_python_pkg/setup.cfg](demo_python_pkg/setup.cfg) | 将启动脚本安装到 `lib/demo_python_pkg` |
-| [demo_python_pkg/package.xml](demo_python_pkg/package.xml) | 包名、`rclpy` 依赖及 `ament_python` 构建类型 |
-| [demo_python_pkg/resource/demo_python_pkg](demo_python_pkg/resource/demo_python_pkg) | 安装到 ament 索引的包标记文件，内容可以为空 |
-| [demo_python_pkg/demo_python_pkg/__init__.py](demo_python_pkg/demo_python_pkg/__init__.py) | 标记 Python 包 |
-| [demo_python_pkg/test/](demo_python_pkg/test/) | 创建功能包时生成的检查模板；本章不据此声称所有测试已通过 |
-| [ros2_cpp_node.cpp](ros2_cpp_node.cpp) | 早期独立 `rclcpp` 节点源码；本次运行的新包为 `demo_cpp_pkg`，完整包源码仍待同步 |
-| [CMakeLists.txt.back](CMakeLists.txt.back) | C++ 示例的 CMake 配置备份；并非 CMake 默认读取的活动配置文件 |
-| [TROUBLESHOOTING.md](TROUBLESHOOTING.md) | 模块导入、包识别、日志格式及新增入口漏逗号的排错记录 |
-| [CPP_NODE.md](CPP_NODE.md) | C++ 包配置、编译、安装与 `ros2 run` 的完整排错和成功记录 |
-
-当前已归档的源码结构（新建 `demo_cpp_pkg` 完整源码待同步）：
+| [Python 包配置](chapt2_ws/src/demo_python_pkg/setup.py) | python_node、person_node、writer_node 三个入口 |
+| [Python 包清单](chapt2_ws/src/demo_python_pkg/package.xml) | rclpy 依赖与 ament_python 构建类型 |
+| [Python 脚本安装配置](chapt2_ws/src/demo_python_pkg/setup.cfg) | 脚本安装到 lib/demo_python_pkg |
+| [python_node.py](chapt2_ws/src/demo_python_pkg/demo_python_pkg/python_node.py) | 创建节点、输出 INFO/WARN 日志 |
+| [person_node.py](chapt2_ws/src/demo_python_pkg/demo_python_pkg/person_node.py) | Node 继承、姓名年龄属性、eat 方法 |
+| [writer_node.py](chapt2_ws/src/demo_python_pkg/demo_python_pkg/writer_node.py) | PersonNode 继承、作品属性与组合日志 |
+| [Python 包测试模板](chapt2_ws/src/demo_python_pkg/test/) | 原始生成的 lint 检查模板；未声称 ROS 测试全部通过 |
+| [C++ CMake 配置](chapt2_ws/src/demo_cpp_pkg/CMakeLists.txt) | rclcpp::rclcpp 链接及 install(TARGETS) |
+| [C++ 包清单](chapt2_ws/src/demo_cpp_pkg/package.xml) | ament_cmake 与 rclcpp 依赖 |
+| [cpp_node.cpp](chapt2_ws/src/demo_cpp_pkg/src/cpp_node.cpp) | C++ 节点初始化、日志与 spin |
+| [早期独立 Python 示例](ros2_python_node.py) · [C++ 示例](ros2_cpp_node.cpp) · [配置备份](CMakeLists.txt.back) | 保留学习过程；备份不是活动 CMakeLists.txt |
 
 ```text
 CHAPT2/
-├── ros2_python_node.py
-├── ros2_cpp_node.cpp
-├── CMakeLists.txt.back
-└── demo_python_pkg/
-    ├── package.xml
-    ├── setup.py
-    ├── setup.cfg
-    ├── resource/
-    │   └── demo_python_pkg
-    └── demo_python_pkg/
-        ├── __init__.py
-        ├── py.typed
-        └── python_node.py
+├── chapt2_ws/
+│   └── src/
+│       ├── demo_cpp_pkg/
+│       │   ├── CMakeLists.txt
+│       │   ├── package.xml
+│       │   └── src/cpp_node.cpp
+│       └── demo_python_pkg/
+│           ├── setup.py
+│           ├── setup.cfg
+│           ├── package.xml
+│           ├── resource/demo_python_pkg
+│           └── demo_python_pkg/
+│               ├── __init__.py
+│               ├── python_node.py
+│               ├── person_node.py
+│               └── writer_node.py
+├── TROUBLESHOOTING.md
+├── CPP_NODE.md
+├── OOP_NODES.md
+└── images/
 ```
 
-## 运行与复现
+旧版直接位于 `CHAPT2/demo_python_pkg` 的包已迁移到上面的工作空间，避免 colcon 发现两个同名包。原始截图中的旧路径保留作历史证据。
 
-以下命令在 Ubuntu 终端中执行，环境沿用学习时的 ROS 2 Lyrical。`CHAPT2` 就是本章的 colcon 工作空间，功能包直接放在本章目录下。应在本章根目录构建，避免进入 `install/` 中构建或修改生成文件。
+## 构建与运行
 
-### 直接运行节点
-
-从仓库根目录开始：
+在已安装相应依赖的 Ubuntu Bash 中，从仓库根目录执行：
 
 ```bash
-cd CHAPT2
+cd CHAPT2/chapt2_ws
 source /opt/ros/lyrical/setup.bash
-python3 ros2_python_node.py
-```
-
-观察日志后按 `Ctrl+C` 停止，再继续构建练习。
-
-### 构建并运行功能包
-
-在 `CHAPT2` 目录执行：
-
-```bash
-source /opt/ros/lyrical/setup.bash
+rosdep install --from-paths src --ignore-src -r -y
 colcon list
-colcon build --packages-select demo_python_pkg
+colcon build
 source install/setup.bash
+ros2 pkg prefix demo_cpp_pkg
 ros2 pkg prefix demo_python_pkg
-ros2 run demo_python_pkg python_node
 ```
 
-检查结果：
+`rosdep` 命令要求已经安装并初始化 rosdep；依赖已齐全时可直接构建。构建成功后分别运行，停止当前节点后再启动下一个：
 
-1. `colcon list` 中的类型应为 `(ros.ament_python)`。
-2. 构建应结束于 `1 package finished`，并检查是否另有错误。
-3. `ros2 pkg prefix` 应输出当前工作空间中该包的安装前缀。
-4. 节点打印 `INFO` 和 `WARN` 的“你好”日志后等待事件。
+```bash
+ros2 run demo_cpp_pkg cpp_node
+ros2 run demo_python_pkg python_node
+ros2 run demo_python_pkg person_node
+ros2 run demo_python_pkg writer_node
+```
 
-打开新终端后，需要重新加载 ROS 2 及本工作空间的环境。`source install/setup.bash` 依赖当前目录，运行时应位于 `CHAPT2`。
+每个新终端都需加载 ROS 2 及当前工作空间环境。构建应从 `chapt2_ws` 根目录执行，不在包目录或 install 中构建。日志打印一次后进入 spin；当前没有周期性定时器或话题通信。
 
-### 自定义与恢复日志格式
+## 日志与退出
 
-先停止正在运行的节点，再在同一个终端设置格式并重启：
+设置格式需在启动进程前完成：
 
 ```bash
 export RCUTILS_CONSOLE_OUTPUT_FORMAT='[{function_name}:{line_number}]:{message}'
-ros2 run demo_python_pkg python_node
 ```
 
-恢复默认格式时，先停止节点，再执行：
+恢复默认格式使用 `unset RCUTILS_CONSOLE_OUTPUT_FORMAT`，随后重新启动节点。注意 FORMAT 不要写成 FROMAT。
 
-```bash
-unset RCUTILS_CONSOLE_OUTPUT_FORMAT
-ros2 run demo_python_pkg python_node
-```
+按 Ctrl+C 停止当前基础示例时，可能出现 KeyboardInterrupt 堆栈。它与启动失败不同；整洁退出的可选处理见 [类与节点记录](OOP_NODES.md)。目前上传的生命周期保持原练习方式，尚未统一改成上下文管理形式。
 
-这里的 `FORMAT` 不能写成 `FROMAT`。环境变量在进程启动时被继承，因此应在修改后重新启动节点。
+## 排错与下一步
 
-## 关键配置
+包注册、XML、入口逗号等见 [Python 排错](TROUBLESHOOTING.md)；CMake 版本差异与安装关键字见 [C++ 排错](CPP_NODE.md)；模块位置、super、作用域、参数和单条日志见 [OOP_NODES.md](OOP_NODES.md)。
 
-入口配置：
-
-```python
-'python_node = demo_python_pkg.python_node:main'
-```
-
-左边 `python_node` 是 `ros2 run` 使用的可执行入口名；右边 `demo_python_pkg.python_node` 对应内层包中的 `python_node.py`；`:main` 表示调用其中的 `main()`。
-
-ROS 2 注册路径：
-
-```python
-('share/ament_index/resource_index/packages',
- ['resource/' + package_name])
-```
-
-包清单中的依赖和构建类型：
-
-```xml
-<depend>rclpy</depend>
-<export>
-  <build_type>ament_python</build_type>
-</export>
-```
-
-这些配置与源码目录共同决定包的发现、安装和启动，不能只检查其中一项。
-
-## 排错速查
-
-| 现象 | 本次排查中的原因或证据 | 修复或检查 |
-| --- | --- | --- |
-| `ModuleNotFoundError: No module named 'demo_python_pkg.python_node'` | 节点曾放在外层目录；入口还曾多写 `.ros2` | 将节点放入内层 Python 包，并让入口与实际模块名一致 |
-| `Summary: 0 packages finished` | 在 `install/.../lib/demo_python_pkg` 中执行了构建 | 返回本章工作空间根目录构建 |
-| `Package 'demo_python_pkg' not found` | 曾有 `amet_index` 拼写错误；之后虽已存在注册文件，包仍被识别为普通 `(python)` | 修正 `ament_index`，继续检查 `package.xml`，不能以注册文件存在作为全部修复依据 |
-| `colcon list` 显示 `(python)`，环境前缀只有 `/opt/ros/lyrical` | 依赖标签曾写成 `<depend>rclpy<depend>`，XML 不合法；修正后类型恢复为 `ros.ament_python` | 改为 `<depend>rclpy</depend>`，保存、重新构建并加载环境 |
-| `install/setup.bush: 没有那个文件或目录` | 加载脚本扩展名拼错 | 使用 `source install/setup.bash` |
-| 日志格式保持默认 | 变量名写成 `RCUTILS_CONSOLE_OUTPUT_FROMAT` | 改为 `RCUTILS_CONSOLE_OUTPUT_FORMAT`，重启节点 |
-
-完整的现象、定位依据和修复顺序见[本章排错记录](TROUBLESHOOTING.md)。
-
-<details>
-<summary>查看排错过程截图</summary>
-
-节点模块导入失败：
-
-![Python 模块未找到](images/python-module-not-found.png)
-
-源码布局和包配置检查：
-
-![Python 包配置检查](images/python-package-config.png)
-
-注册文件存在，但包识别类型和环境前缀异常：
-
-![colcon 包识别与环境诊断](images/colcon-package-diagnosis.png)
-
-日志格式环境变量拼写错误：
-
-![日志格式变量拼写错误](images/log-format-typo.png)
-
-</details>
-
-## 已知限制与下一步
-
-Python 与 C++ 功能包均已有学习者 Ubuntu 终端的构建、发现和启动证据，C++ 过程见 [CPP_NODE.md](CPP_NODE.md)。本次仓库整理未在其他系统重复运行 ROS 2。仓库已有早期 C++ 源码与配置备份，新建 `demo_cpp_pkg` 的完整源文件仍待同步；不能据此声称新克隆仓库已能复现该 C++ 包。
-
-节点示例还没有话题通信、服务、动作、机械臂接口或 VLA 推理。下一步先完成 Python/C++ 节点的发布与订阅练习，再连接机器人描述、仿真、机械臂控制和具身智能方向。
+源码来自本次提供的 embedded-learning 文件夹，排除 build/install/log、缓存、二进制和机器配置。归档时仅按前面要求调整单条日志设计，并补齐 C++ rclcpp 清单依赖；原始截图不因此改写。下一步补充当前版本在 Ubuntu 的复测，再学习发布/订阅、服务、参数和 Launch；机械臂与 VLA 仍为后续方向。
