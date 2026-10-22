@@ -1,14 +1,22 @@
 # ROS 2 学习路线
 
-开始日期：2026-10-21。现有基础：C++、Linux。当前主线：VMware Ubuntu + ROS 2 Lyrical + C++。长期方向：机械臂操作、具身智能、VLA 与 π0.7；Python 用于后续数据处理和策略实验。以现有仓库 [embedded-robotics-lab](https://github.com/ruky-timetravel/embedded-robotics-lab) 记录学习。
+现有基础：C++、Linux。当前主线：VMware Ubuntu + ROS 2 Lyrical，结合 C++ 与 Python 学习。长期方向：机械臂操作、具身智能、VLA 与 π0.7；Python 也用于后续数据处理和策略实验。以现有仓库 [embedded-robotics-lab](https://github.com/ruky-timetravel/embedded-robotics-lab) 记录学习，源码、排错和截图统一按章节归档。
 
-路线按实践验收推进，不规定每天必须学完的内容。当前学习鱼香 ROS 机器人《ROS 2机器人开发从入门到实践》，进度为 [1.3 运行你的第一个机器人](https://www.bilibili.com/video/BV1iE421w7d5)，先围绕已经运行的 TurtleSim 理解节点与话题。
+路线按实践结果推进。当前学习鱼香 ROS 机器人《ROS 2机器人开发从入门到实践》：第一章包含 [1.3 运行你的第一个机器人](https://www.bilibili.com/video/BV1iE421w7d5)与编程基础；第二章已实践节点与 Python 功能包。课程进度与本仓库章节分别记录，以实际完成的实验为准。
+
+## 当前章节入口
+
+| 章节 | 源码、实验与排错 | 当前结果 |
+| --- | --- | --- |
+| CHAPT1 | [本章入口](../../CHAPT1/README.md) · [TurtleSim](../../CHAPT1/TURTLESIM.md) · [环境截图](../../CHAPT1/EVIDENCE.md) · [排错](../../CHAPT1/TROUBLESHOOTING.md) | 已有编程源码、小海龟窗口和节点图；保留 CMake 报错过程，当前源码完整重跑证据待补 |
+| CHAPT2 | [本章入口](../../CHAPT2/README.md) · [排错与截图](../../CHAPT2/TROUBLESHOOTING.md) | Python 包识别、构建和 `ros2 run` 日志输出已确认；C++ 节点仅有源码与配置备份 |
 
 ## 已有证据
 
 - 当前终端 `printenv ROS_DISTRO` 输出 `lyrical`。
 - 已看到 TurtleSim 窗口和 `rqt_graph` 中的 `/teleop_turtle`、`/turtlesim`、`/turtle1/cmd_vel` 连接。
-- 键盘运动、命令输出和概念掌握情况尚待验收。
+- Python 功能包已被识别为 `ros.ament_python`，构建结束于 `1 package finished`，`ros2 run` 成功打印 INFO/WARN“你好”，证据见 [CHAPT2 运行截图](../../CHAPT2/images/python-node-success.png)。
+- C++ 节点已有源码，尚无编译或运行成功截图；小海龟的键盘运动、实际消息样本和概念解释仍待记录。
 - Ubuntu 具体版本和环境加载路径需补充实际输出。
 
 ## 分阶段计划
@@ -17,11 +25,11 @@
 |---|---|---|---|
 | 0 | 核对现有 Ubuntu、Lyrical 和仓库记录方式 | 保存环境信息，能在新终端加载同一环境 | 部分确认，版本与路径记录待补 |
 | 1 | 视频 1.3：TurtleSim、节点、包、话题、消息 | 控制海龟运动，观察 `cmd_vel` 和 `pose`，能解释节点图 | 进行中，已观察到启动和图，实际操作待验收 |
-| 2 | C++ `rclcpp`、工作空间、`ament_cmake`、`colcon` | 自建包并编译运行发布者和订阅者，能修改消息或发布频率 | 待开始 |
+| 2 | `rclpy` / `rclcpp`、工作空间、`ament_python` / `ament_cmake`、`colcon` | 自建包、运行节点，再完成发布者与订阅者，能修改消息或发布频率 | Python 包和日志节点已运行；C++ 包与通信实验待完成 |
 | 3 | 用 C++ 节点控制 TurtleSim | 发布 `Twist`、订阅位姿，完成一个可重复的简单控制实验 | 待开始 |
 | 4 | 在已有小实验上学习 Service、参数和 Launch | 调用一次服务、修改一个参数，并用启动文件复现实验 | 待开始 |
 
-本课完成后，可先看 [1.4.5 环境变量](https://www.bilibili.com/video/BV1pm42137bR/)，再进入 [2.1.2 编写你的第一个节点 C++ 示例](https://www.bilibili.com/video/BV1FH4y1c7Px/)。后续内容随视频和实际需求补充，当前先完成 TurtleSim 与 C++ 基础通信。
+节点和环境变量实践见 [CHAPT2](../../CHAPT2/README.md)。后续参考 [1.4.5 环境变量](https://www.bilibili.com/video/BV1pm42137bR/)与 [2.1.2 编写你的第一个节点 C++ 示例](https://www.bilibili.com/video/BV1FH4y1c7Px/)，优先补齐 C++ 节点验收以及发布/订阅通信实验。
 
 ## 机械臂与具身智能拓展目标
 
@@ -39,7 +47,7 @@
 ### π0.7 研究与公开模型实践
 
 - 以 [π0.7 官方介绍](https://www.pi.website/blog/pi07)与[论文](https://arxiv.org/abs/2604.15483)为依据，重点分析输入条件、数据来源、动作接口与评估设定。
-- 截至 2026-10-21，[openpi 官方仓库](https://github.com/Physical-Intelligence/openpi)当前列出的模型为 π0、π0-FAST、π0.5，尚未在该入口核实 π0.7 的公开权重和完整训练配置。π0.7 先作为论文与方法研究目标；公开实现实验按实际可用资源开展。
+- 开始实验前，在 [openpi 官方仓库](https://github.com/Physical-Intelligence/openpi)核对模型实现、权重、训练配置与许可证的实际公开情况。π0.7 先作为论文与方法研究目标；公开实现实验按届时可用资源开展。
 - 公开模型的官方评估结果作为参考，本仓库的成功率、泛化和延迟结论须来自自己实际完成的实验。
 
 ### 实验安排与记录
@@ -56,16 +64,16 @@
 
 固定使用当前已观察到的 Lyrical。每个新终端加载同一套环境；使用已核实存在的安装路径，不混用其他发行版教程中的 `source` 路径。
 
-Lyrical Luth 于 2026 年 5 月 22 日发布，属于支持至 2031 年 5 月的 LTS。其 Ubuntu Tier 1 平台为 26.04；Ubuntu 24.04 为 Tier 3，需要源码构建。当前虚拟机的 Ubuntu 版本尚未核对，不从 ROS 2 发行版名称推断系统版本，也不因此直接重装。
+Ubuntu 26.04.1 LTS / x86_64 沿用此前用户报告，完整系统版本和工具版本按章节记录补充。涉及新工具或模型时，重新核对官方依赖和支持平台，不从当前节点能运行推断所有组件均已兼容。
 
-## 每次学习的记录方式
+## 按章节记录
 
-1. 选一个可验证目标，写清预期现象。
-2. 实际执行，保存关键命令、输出或截图。
-3. 用自己的话解释结果，记录失败和未完成项。
-4. 更新阶段状态，向现有 GitHub 仓库提交本次实际成果。
+1. 将目标归入对应 `CHAPT`，写清预期现象与实际文件导航。
+2. 在该章节保存源码、复现命令、输出与 `images/` 截图。
+3. 将问题、诊断、修改和复测写入该章节 `TROUBLESHOOTING.md`，用自己的话解释结果。
+4. 更新章节状态与[总体进度](../progress.md)，提交真实成果。
 
-使用 [学习日志模板](daily-log-template.md) 作为记录模板。观察到节点启动、完成实验、理解概念是三种不同证据，应分别记录。没有实际运行的预期结果不能写成已完成结果。
+使用 [章节记录模板](../chapter-record-template.md) 作为新增内容的参考。观察到节点启动、完成实验、理解概念是三种不同证据，应分别记录。没有实际运行的预期结果不能写成已完成结果。
 
 提交围绕真实成果，例如 `docs: 记录 TurtleSim 节点与话题检查` 或 `feat: 添加 C++ 速度发布节点`，不为增加提交次数编造学习进度。
 

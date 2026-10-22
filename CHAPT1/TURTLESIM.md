@@ -1,10 +1,12 @@
-# 第一课：从 turtlesim 理解节点与话题
+# CHAPT1：从 turtlesim 理解节点与话题
+
+[本章入口](README.md) · [环境与截图](EVIDENCE.md) · [下一章节点与功能包](../CHAPT2/README.md)
 
 对应鱼香 ROS 机器人《ROS 2机器人开发从入门到实践》1.3「运行你的第一个机器人」。学习环境使用已有 VMware Ubuntu 和 ROS 2 Lyrical，后续编程以 C++ 为主；已有 C++、Linux 基础，无需重新从语言和终端入门。本笔记为结合当前环境编写的概念与练习记录。
 
 ## 当前证据与待完成事项
 
-2026-10-21 已从实际界面观察到：
+本章保留的实际界面记录显示：
 
 - Ubuntu 终端中 `printenv ROS_DISTRO` 输出 `lyrical`。
 - TurtleSim 窗口已经打开。
@@ -139,9 +141,9 @@ ros2 run rqt_graph rqt_graph
 - [ ] 用自己的话说明包名、可执行程序名、节点名和话题名。
 - [ ] 将真实实验结果提交到现有 GitHub 仓库。
 
-记录位置为现有仓库的 `docs/ros2/`；参见 [今日记录](2026-10-21.md)。当前笔记中的命令是待执行指南，只有保存实际证据后才勾选对应项。
+本实验记录集中保存在 `CHAPT1/`，截图与环境见 [EVIDENCE.md](EVIDENCE.md)。当前笔记中的命令是操作指南，只有保存实际证据后才勾选对应项。
 
-完成本课后，可接着学习视频 1.4.5「环境变量」，再进入 2.1.2「编写你的第一个节点 C++ 示例」与 C++ `rclcpp` 包；官方 talker/listener 可作为后续可选示例。
+环境变量、Python 节点和功能包实践已整理到 [CHAPT2](../CHAPT2/README.md)，其中 Python 功能包已有启动成功截图。C++ 节点目前只有源码与配置备份，后续补齐包结构和运行验收；官方 talker/listener 可作为发布与订阅练习的参考。
 
 ## 参考
 
@@ -153,4 +155,4 @@ ros2 run rqt_graph rqt_graph
 - [Lyrical 官方文档源：节点](https://github.com/ros2/ros2_documentation/blob/lyrical/source/ROS-Framework/nodes/Working-with-nodes/Understanding-ROS2-Nodes/Understanding-ROS2-Nodes.rst)
 - [Lyrical 官方文档源：话题](https://github.com/ros2/ros2_documentation/blob/lyrical/source/ROS-Framework/interfaces/topics/Understanding-ROS2-Topics/Understanding-ROS2-Topics.rst)
 
-官方 Lyrical 文档目录已经调整，上述 GitHub 链接已核验存在。网页版本的 TurtleSim 位于 `Get-Started`，节点与话题位于 `ROS-Framework`。参考内容以官方 `lyrical` 分支为准。
+参考链接保留对应的官方 `lyrical` 分支，操作时仍以实际环境和官方说明为准。

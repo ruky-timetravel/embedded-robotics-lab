@@ -1,4 +1,8 @@
-# 2026-10-21：开始 ROS 2 视频学习
+# CHAPT1：Ubuntu 与小海龟实验记录
+
+[本章入口](README.md) · [小海龟实验步骤](TURTLESIM.md) · [本章排错](TROUBLESHOOTING.md)
+
+本页保存本章的环境与界面证据，按实验内容归档。后续 Python 功能包的运行与排错材料见 [CHAPT2](../CHAPT2/README.md)。
 
 ## 本次目标
 
@@ -20,17 +24,17 @@
 - 键盘控制程序的终端显示 `Reading from keyboard`。
 - rqt 节点图显示 `/teleop_turtle` 与 `/turtlesim`，通过 `/turtle1/cmd_vel` 连接。
 - 图中还显示 Action 的反馈和状态连接，本课暂不据此验收 Action 学习。
-- 已创建本节笔记、后续路线与日志模板，保存在同一仓库中。
+- 已创建本节笔记、后续路线与章节记录模板，保存在同一仓库中。
 
 ### Ubuntu 学习现场
 
-![Ubuntu 中的 TurtleSim、节点图和终端](2026-10-21-ubuntu.png)
+![Ubuntu 中的 TurtleSim、节点图和终端](images/ubuntu-turtlesim.png)
 
 原始 VMware 窗口截图，保留 Ubuntu 桌面与终端上下文。截图能证明这些程序和节点图当时已显示，不能单凭静态截图证明键盘控制、消息值、帧率或整个仿真系统正常。
 
 ### 小海龟与节点图局部
 
-![TurtleSim 和 rqt 节点图](2026-10-21-turtlesim-graph.png)
+![TurtleSim 和 rqt 节点图](images/turtlesim-graph.png)
 
 局部图裁自同次学习观察，便于阅读节点与话题名称。
 
@@ -52,7 +56,7 @@ source /opt/ros/lyrical/setup.bash
 
 ## 接下来由自己执行并补充
 
-参照 [第一课](lesson-01-turtlesim.md)，在新 Ubuntu 终端记录：
+参照 [本章小海龟实验](TURTLESIM.md)，在新 Ubuntu 终端记录：
 
 ```bash
 cat /etc/os-release
@@ -79,4 +83,4 @@ ros2 topic echo /turtle1/cmd_vel
 
 ## 下一步
 
-完成本节实践，再按需要复习 [1.4.5 环境变量](https://www.bilibili.com/video/BV1pm42137bR/)，进入 [2.1.2 编写你的第一个节点（C++）](https://www.bilibili.com/video/BV1FH4y1c7Px/)。
+补充本章运动与实际消息记录，并继续 [CHAPT2：节点与 Python 功能包](../CHAPT2/README.md)。第二章已记录 Python 包运行成功；C++ 节点的独立功能包和运行验收仍需完成。

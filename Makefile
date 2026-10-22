@@ -1,23 +1,23 @@
 CC = gcc
 CFLAGS = -std=c11 -Wall -Wextra -g -O0
-DAY01_BIN = build/day01/demo
+CHAPTER1_BIN = build/CHAPT1/demo
 
-.PHONY: all day01 run-day01 verify clean
+.PHONY: all chapter1-c run-chapter1-c verify clean
 
-all: day01
+all: chapter1-c
 
-day01: $(DAY01_BIN)
+chapter1-c: $(CHAPTER1_BIN)
 
-$(DAY01_BIN): lessons/day01/main.c
-	mkdir -p build/day01
+$(CHAPTER1_BIN): CHAPT1/main.c
+	mkdir -p build/CHAPT1
 	$(CC) $(CFLAGS) $< -o $@
 
-run-day01: day01
-	./$(DAY01_BIN)
+run-chapter1-c: chapter1-c
+	./$(CHAPTER1_BIN)
 
-verify: day01
-	test "$$(./$(DAY01_BIN))" = "Speed error: 20"
-	@printf 'Day01 build and output check passed.\n'
+verify: chapter1-c
+	test "$$(./$(CHAPTER1_BIN))" = "Speed error: 20"
+	@printf 'Chapter 1 C build and output check passed.\n'
 
 clean:
-	rm -f $(DAY01_BIN)
+	rm -f $(CHAPTER1_BIN)

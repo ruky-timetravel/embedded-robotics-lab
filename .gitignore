@@ -1,5 +1,15 @@
 # Compiler outputs
 /build/
+**/build/
+**/install/
+**/log/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+CTestTestfile.cmake
+*.egg-info/
+learn_cmake
+speed_error
 *.o
 *.obj
 *.exe
@@ -16,6 +26,8 @@ venv/
 __pycache__/
 *.py[cod]
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
 
 # Local settings and credentials
 .vscode/

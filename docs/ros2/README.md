@@ -1,55 +1,43 @@
-# ROS 2 视频学习记录
+# ROS 2 学习入口
 
-从 2026-10-21 开始，跟随鱼香 ROS 机器人《ROS 2机器人开发从入门到实践》，在已有 C++ / Linux 基础上学习。当前对应 [1.3 运行你的第一个机器人](https://www.bilibili.com/video/BV1iE421w7d5/)。
+跟随鱼香 ROS 机器人《ROS 2机器人开发从入门到实践》，在已有 C++ / Linux 基础上学习。记录按章节组织，不按学习日期建立目录。当前环境为 VMware Ubuntu，ROS 2 发行版在终端中显示为 Lyrical。
 
-## 当前环境与进度
+## 章节导航
 
-- 环境：VMware 中的 Ubuntu；Ubuntu 26.04.1 LTS / x86_64 沿用仓库此前用户报告。
-- ROS 2：本次直接观察到终端 `printenv ROS_DISTRO` 输出 `lyrical`。
-- 已看到 TurtleSim 窗口以及 `/teleop_turtle`、`/turtlesim` 的节点连接图。
-- 键盘控制、话题消息的原始输出与自己的解释，继续在今日记录中补充。
-- 当前以 C++ 为编程主线，Python 示例按视频需要阅读。
+| 章节 | 内容与材料 | 当前证据 |
+| --- | --- | --- |
+| [CHAPT1：Ubuntu、编程与 ROS 2 初体验](../../CHAPT1/README.md) | C/C++、Python、CMake；[小海龟实验](../../CHAPT1/TURTLESIM.md)；[Ubuntu 截图](../../CHAPT1/EVIDENCE.md)；[排错记录](../../CHAPT1/TROUBLESHOOTING.md) | 已看到 TurtleSim 窗口与节点图；保留 CMake 拼写错误截图，尚未补充当前源码完整构建验收截图 |
+| [CHAPT2：节点与 Python 功能包](../../CHAPT2/README.md) | `rclpy`、日志、包目录、入口与 `colcon`；[排错过程和截图](../../CHAPT2/TROUBLESHOOTING.md) | `ros.ament_python` 识别、构建成功及 `ros2 run` 的 INFO/WARN 输出已由终端截图确认；C++ 节点仅有源码 |
 
-## 从这里继续
+## 从当前结果继续
 
-| 内容 | 链接 |
-| --- | --- |
-| 第一课：小海龟、节点与话题 | [概念、命令和练习](lesson-01-turtlesim.md) |
-| 今天的真实记录与 Ubuntu 截图 | [2026-10-21](2026-10-21.md) |
-| 后续学习安排 | [按验收推进的路线](roadmap.md) |
-| 下次学习时复制填写 | [日志模板](daily-log-template.md) |
-| 仓库总体进度 | [学习进度与证据](../progress.md) |
-
-今天的核心关系：
+Python 功能包已走通：
 
 ```text
-键盘 → /teleop_turtle → /turtle1/cmd_vel → /turtlesim → 海龟运动
+package.xml 与 setup.py → colcon build → source install/setup.bash
+→ ros2 run demo_python_pkg python_node → INFO/WARN 日志
 ```
 
-`/teleop_turtle` 是节点，`/turtle1/cmd_vel` 是话题，`geometry_msgs/msg/Twist` 是消息类型。包名、可执行程序名、节点名分别对应不同概念，详见第一课。
+这一结果验证的是节点启动和日志输出。后续先补齐 C++ 功能包与节点运行记录，再完成发布/订阅、服务、参数和 Launch 练习。TurtleSim 的运动与消息对应关系仍需要保存实际消息样本和自己的解释。
 
-## 现在做一个小练习
+- [总体进度与证据](../progress.md)
+- [ROS 2、机械臂、具身智能、VLA 与 π0.7 方向目标](roadmap.md)
+- [新增章节时使用的模板](../chapter-record-template.md)
 
-保留已经运行的小海龟和键盘控制程序。在 Ubuntu 的新终端执行：
+## 环境约定
+
+每个新终端先加载当前发行版的环境：
 
 ```bash
 source /opt/ros/lyrical/setup.bash
-ros2 node list
-ros2 topic list -t
-ros2 topic info /turtle1/cmd_vel
-ros2 topic echo /turtle1/cmd_vel
 ```
 
-切回运行 `turtle_teleop_key` 的终端，按方向键，让观察终端收到速度消息。记录一组 `linear.x` 和 `angular.z`，解释它们与海龟运动的关系；按 `Ctrl+C` 结束消息观察。
+构建自定义功能包后，还要在工作空间根目录执行 `source install/setup.bash`。不要将旧教程中的 Humble 加载路径直接套到当前 Lyrical 环境。Ubuntu 具体版本沿用已有用户报告，完整系统版本输出和工具版本仍按实际记录补充。
 
-## 视频与当前系统的差异
-
-当前使用 Lyrical。若视频或旧笔记中出现 `/opt/ros/humble/setup.bash`，应以实际安装版本为准。截图已经记录该 Humble 路径不存在的报错，后续加载 `/opt/ros/lyrical/setup.bash`。
-
-Lyrical 的 TurtleSim、节点、话题核心概念可按本课练习；遇到安装命令、包名或接口变化时，查对应发行版官方文档。本记录不将视频评论中的 ROS 1 命令用作 ROS 2 步骤。
+## 参考
 
 - [课程视频：1.3 运行你的第一个机器人](https://www.bilibili.com/video/BV1iE421w7d5/)
 - [ROS 2 Lyrical 官方文档](https://docs.ros.org/en/lyrical/)
 - [Lyrical 官方 TurtleSim 教程源文件](https://github.com/ros2/ros2_documentation/blob/lyrical/source/Get-Started/Introducing-Turtlesim/Introducing-Turtlesim.rst)
 
-本目录的操作说明由 AI 辅助整理；截图来自本次真实 Ubuntu 虚拟机画面。已观察到的现象、待运行的命令和学习者自己的理解分别记录。课程内容保留原作者链接。
+笔记由 AI 辅助整理，源码和截图来自学习过程。运行结果、待实践内容和未来目标按各章证据分别标注。
