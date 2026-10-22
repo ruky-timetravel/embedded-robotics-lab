@@ -6,7 +6,7 @@
 
 ## 已完成的实验
 
-最后的终端截图确认：
+早期 `python_node` 的终端截图确认：
 
 - `colcon list` 将 `demo_python_pkg` 识别为 `ros.ament_python`。
 - `colcon build --packages-select demo_python_pkg` 显示 `1 package finished`。
@@ -17,6 +17,8 @@
 黄色 `WARN` 是源码主动调用 `warning('你好')` 的结果，不能据此判断节点启动失败。日志打印一次之后，程序进入 `rclpy.spin(node)` 等待事件，不会自动重复打印。
 
 随后已完成 C++ 功能包的构建与运行：`colcon build` 显示 `demo_cpp_pkg`、`demo_python_pkg` 两个包完成，`ros2 pkg prefix demo_cpp_pkg` 返回工作空间安装前缀，`ros2 run demo_cpp_pkg cpp_node` 输出 `[cpp_node]: 你好`。详见 [C++ 实验、排错与成功截图](CPP_NODE.md)。
+
+后续在 `chapt2_ws` 中新增 `person_node` 入口时，已定位并修复 `console_scripts` 列表漏逗号的问题，截图确认重新构建成功。新增入口的运行结果尚待记录，见 [入口逗号排错与工作空间说明](TROUBLESHOOTING.md#7-新增-person_node-入口时漏写逗号)。该新工作空间的完整源码尚未同步，下面的已归档目录结构仍为早期版本。
 
 ## 学习要点
 
@@ -40,7 +42,7 @@
 | [demo_python_pkg/test/](demo_python_pkg/test/) | 创建功能包时生成的检查模板；本章不据此声称所有测试已通过 |
 | [ros2_cpp_node.cpp](ros2_cpp_node.cpp) | 早期独立 `rclcpp` 节点源码；本次运行的新包为 `demo_cpp_pkg`，完整包源码仍待同步 |
 | [CMakeLists.txt.back](CMakeLists.txt.back) | C++ 示例的 CMake 配置备份；并非 CMake 默认读取的活动配置文件 |
-| [TROUBLESHOOTING.md](TROUBLESHOOTING.md) | 从模块导入错误到包识别恢复的完整排错记录 |
+| [TROUBLESHOOTING.md](TROUBLESHOOTING.md) | 模块导入、包识别、日志格式及新增入口漏逗号的排错记录 |
 | [CPP_NODE.md](CPP_NODE.md) | C++ 包配置、编译、安装与 `ros2 run` 的完整排错和成功记录 |
 
 当前已归档的源码结构（新建 `demo_cpp_pkg` 完整源码待同步）：

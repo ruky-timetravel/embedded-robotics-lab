@@ -1,10 +1,10 @@
-# 第二章排错记录：从模块导入失败到 Python 节点启动
+# 第二章 Python 排错记录：模块、功能包与入口配置
 
 [本章入口](README.md) · [功能包源码](demo_python_pkg/) · [成功截图](images/python-node-success.png)
 
 本页记录 Python 包排错。后续 C++ 包的命令拼写、Lyrical 依赖宏、安装关键字及运行成功记录见 [CPP_NODE.md](CPP_NODE.md)。
 
-这次排查涉及多个问题。先修复源码位置与入口，再核对构建目录、安装索引和环境，最终通过修正 `package.xml` 的 XML 闭合标签恢复 ROS 2 包识别。下面按排查顺序记录，当前上传的源码已经包含这些修正。
+早期排查先修复源码位置与入口，再核对构建目录、安装索引和环境，最终通过修正 `package.xml` 的 XML 闭合标签恢复 ROS 2 包识别；当前上传的早期源码已包含这些修正。后续新工作空间中新增入口漏逗号的问题见第 7 节，以截图和配置片段归档，新版完整源码仍待同步。
 
 ## 1. 启动脚本存在，但 Python 模块找不到
 
@@ -168,6 +168,78 @@ ros2 run demo_python_pkg python_node
 ```
 
 可额外用 `unset RCUTILS_CONSOLE_OUTPUT_FROMAT` 清除误写的变量。若将设置写入了 `~/.bashrc`，也需修改对应行；当前没有证据表明已写入。格式变量参考 [rcutils 日志实现](https://github.com/ros2/rcutils/blob/lyrical/src/logging.c)。
+
+## 7. 新增 `person_node` 入口时漏写逗号
+
+### 现象与定位
+
+在后续新工作空间 `CHAPT2/chapt2_ws` 中，给 `demo_python_pkg` 添加 `person_node` 入口后构建失败。报错包含：
+
+```text
+RuntimeError: 'distutils.core.setup()' was never called --
+perhaps 'setup.py' is not a Distutils setup script?
+```
+
+![新增入口后读取 setup.py 元数据失败](images/python-entry-points-error.png)
+
+学习者定位为 `console_scripts` 两条入口之间漏了逗号，补上后再次构建，终端显示 `Finished <<< demo_python_pkg` 和 `Summary: 1 package finished`。
+
+![入口补上逗号后构建成功](images/python-entry-points-comma-fixed.png)
+
+修正后的关键片段：
+
+```python
+entry_points={
+    'console_scripts': [
+        'python_node = demo_python_pkg.python_node:main',
+        'person_node = demo_python_pkg.person_node:main'
+    ],
+},
+```
+
+第一条入口末尾的逗号用于分隔两个列表项。最后一项后面的尾逗号可选，也可保留以便继续新增入口。
+
+### 为什么漏逗号不一定出现 SyntaxError
+
+Python 会拼接相邻的字符串字面量，即使它们跨行放在同一个列表里。例如：
+
+```python
+['python_node = demo_python_pkg.python_node:main'
+ 'person_node = demo_python_pkg.person_node:main']
+```
+
+这是含一个长字符串的列表，不是两个入口。因而语法解析可能通过，但入口字符串的内容已经错误。参见 [Python 字符串字面量拼接](https://docs.python.org/3.14/reference/expressions.html#string-literal-concatenation)和 [setuptools console_scripts 配置](https://setuptools.pypa.io/en/latest/userguide/entry_point.html#console-scripts)。
+
+`setup() was never called` 是本次构建日志中的外层提示，不能仅凭它断言 `setup.py` 一定缺少 `setup(...)` 语句；应结合完整配置检查。本轮依据学习者定位、补逗号的截图和随后构建成功的结果记录原因，没有将早期“调用缺失”的排查假设写成结论。
+
+### “权限不够”来自直接执行文件路径
+
+修复截图的终端历史还显示，曾直接输入 `setup.py` 的完整路径，Bash 随后报“权限不够”。这是尝试将该文件作为命令执行时的提示，不能据此判断文件无法读取、无法保存或所有者错误。
+
+查看内容应使用：
+
+```bash
+cd ~/embedded-learning/CHAPT2/chapt2_ws
+nl -ba src/demo_python_pkg/setup.py
+```
+
+读取文件不要求它具有可执行权限。本轮没有足够证据将所有权修改或权限修改记为修复步骤。
+
+### 后续按工作空间根目录复测
+
+这轮截图的成功构建是在 `chapt2_ws/src/demo_python_pkg` 包目录内执行的，该处构建产物与工作空间根目录下的产物位置不同。后续统一回到 `chapt2_ws` 构建和加载环境：
+
+```bash
+cd ~/embedded-learning/CHAPT2/chapt2_ws
+source /opt/ros/lyrical/setup.bash
+colcon build --packages-select demo_python_pkg
+source install/setup.bash
+ros2 run demo_python_pkg person_node
+```
+
+以上根目录复测和 `person_node` 启动仍待记录实际结果。本轮确认的是补逗号后构建成功，尚未取得该新增入口的运行输出。若入口为 `demo_python_pkg.person_node:main`，对应源码应位于内层 `src/demo_python_pkg/demo_python_pkg/person_node.py`，并提供 `main()`。
+
+当前仓库保存早期功能包源码；新工作空间中新增的 `person_node.py` 和完整配置尚未同步。本节保留截图与关键片段，不将其作为完整源码副本。
 
 ## 结果与尚未覆盖的内容
 

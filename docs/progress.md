@@ -19,6 +19,7 @@
 | [CHAPT1：TurtleSim](../CHAPT1/TURTLESIM.md) | [Ubuntu 与节点图截图](../CHAPT1/EVIDENCE.md)显示海龟窗口、键盘控制提示和 `/turtle1/cmd_vel` 连接 | 部分确认；运动操作、实际速度/位姿消息及其解释尚未保存 |
 | [CHAPT2：Python 节点与功能包](../CHAPT2/README.md) | [成功截图](../CHAPT2/images/python-node-success.png)显示 `(ros.ament_python)`、`1 package finished` 及 `ros2 run` 输出 INFO/WARN“你好” | 运行已确认；当前功能为创建节点和打印日志，尚未实现话题通信 |
 | [CHAPT2：Python 包排错](../CHAPT2/TROUBLESHOOTING.md) | 模块未找到、入口和目录检查、包识别诊断、XML 标签修正与最终复测截图 | 从故障到启动成功的过程已记录；黄色 WARN 来自示例主动输出 |
+| [CHAPT2：新增 person_node 入口](../CHAPT2/TROUBLESHOOTING.md#7-新增-person_node-入口时漏写逗号) | 学习者定位入口列表漏逗号；修复截图显示 `1 package finished` | 包目录内构建成功；工作空间根目录复测、入口运行与新源码同步待补 |
 | [CHAPT2：C++ 功能包与节点](../CHAPT2/CPP_NODE.md) | 6 张截图记录 CMake 错误、配置和编译成功、安装修正、两个包构建完成、包前缀及 `ros2 run` 输出“你好” | 构建与运行已确认；已有早期独立源码，新建 `demo_cpp_pkg` 完整源码待同步 |
 | 后续 ROS 2 通信 | 发布/订阅、服务、参数、Launch | 待完成 |
 
@@ -44,6 +45,7 @@
 4. XML 依赖闭合标签错误会破坏包清单解析。本次修正 `<depend>rclpy</depend>` 后，包类型从普通 `(python)` 恢复为 `(ros.ament_python)`，重新构建并加载环境后运行成功。
 5. 源码、包配置和终端环境都需复核；重复构建不能替代检查完整报错。
 6. C++ 包经历了 `cmake../` 缺少空格、Lyrical 旧依赖宏不可用、`install(TARGET ...)` 关键字错误；改用 `target_link_libraries(cpp_node PRIVATE rclcpp::rclcpp)` 和 `install(TARGETS ...)` 后，工作空间构建及节点运行成功。
+7. `console_scripts` 中相邻字符串漏逗号会被 Python 自动拼接，语法检查通过也不代表入口配置有效。本轮补上两条入口之间的逗号后构建成功；同图中的权限提示来自直接执行脚本路径，不据此判断文件所有权错误。
 
 原始画面与修改顺序见 [Python 排错记录](../CHAPT2/TROUBLESHOOTING.md)和 [C++ 构建与排错记录](../CHAPT2/CPP_NODE.md)。
 
