@@ -83,4 +83,4 @@ ros2 topic echo /turtle1/cmd_vel
 
 ## 下一步
 
-补充本章运动与实际消息记录，并继续 [CHAPT2：节点与 Python 功能包](../CHAPT2/README.md)。第二章已记录 Python 包运行成功；C++ 节点的独立功能包和运行验收仍需完成。
+补充本章运动与实际消息记录，并继续 [CHAPT2：C++ / Python 节点与功能包](../CHAPT2/README.md)。第二章的 Python 与 C++ 包均已有构建、运行成功证据；后续同步新 C++ 包源码并学习通信。

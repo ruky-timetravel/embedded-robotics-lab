@@ -143,7 +143,7 @@ ros2 run rqt_graph rqt_graph
 
 本实验记录集中保存在 `CHAPT1/`，截图与环境见 [EVIDENCE.md](EVIDENCE.md)。当前笔记中的命令是操作指南，只有保存实际证据后才勾选对应项。
 
-环境变量、Python 节点和功能包实践已整理到 [CHAPT2](../CHAPT2/README.md)，其中 Python 功能包已有启动成功截图。C++ 节点目前只有源码与配置备份，后续补齐包结构和运行验收；官方 talker/listener 可作为发布与订阅练习的参考。
+环境变量、Python 节点和功能包实践已整理到 [CHAPT2](../CHAPT2/README.md)，Python 与 C++ 包均已有构建和启动成功截图。C++ 新包的排错与运行见 [CPP_NODE.md](../CHAPT2/CPP_NODE.md)，完整源码待同步；官方 talker/listener 可作为发布与订阅练习的参考。
 
 ## 参考
 

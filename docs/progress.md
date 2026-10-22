@@ -19,7 +19,7 @@
 | [CHAPT1：TurtleSim](../CHAPT1/TURTLESIM.md) | [Ubuntu 与节点图截图](../CHAPT1/EVIDENCE.md)显示海龟窗口、键盘控制提示和 `/turtle1/cmd_vel` 连接 | 部分确认；运动操作、实际速度/位姿消息及其解释尚未保存 |
 | [CHAPT2：Python 节点与功能包](../CHAPT2/README.md) | [成功截图](../CHAPT2/images/python-node-success.png)显示 `(ros.ament_python)`、`1 package finished` 及 `ros2 run` 输出 INFO/WARN“你好” | 运行已确认；当前功能为创建节点和打印日志，尚未实现话题通信 |
 | [CHAPT2：Python 包排错](../CHAPT2/TROUBLESHOOTING.md) | 模块未找到、入口和目录检查、包识别诊断、XML 标签修正与最终复测截图 | 从故障到启动成功的过程已记录；黄色 WARN 来自示例主动输出 |
-| [CHAPT2：C++ 节点](../CHAPT2/ros2_cpp_node.cpp) | `rclcpp` 源码和 `CMakeLists.txt.back` 配置备份 | 已有源码；尚无编译与运行成功截图，也尚未整理为独立 `ament_cmake` 功能包 |
+| [CHAPT2：C++ 功能包与节点](../CHAPT2/CPP_NODE.md) | 6 张截图记录 CMake 错误、配置和编译成功、安装修正、两个包构建完成、包前缀及 `ros2 run` 输出“你好” | 构建与运行已确认；已有早期独立源码，新建 `demo_cpp_pkg` 完整源码待同步 |
 | 后续 ROS 2 通信 | 发布/订阅、服务、参数、Launch | 待完成 |
 
 ## 当前环境
@@ -30,7 +30,7 @@
 | Ubuntu / 架构 | 26.04.1 LTS / x86_64 | 沿用此前用户报告；本次章节整理未重新采集系统版本 |
 | ROS 2 | Lyrical，路径 `/opt/ros/lyrical/setup.bash` | 终端已有 `ROS_DISTRO=lyrical` 输出，后续构建运行截图使用该环境 |
 | Git / Python / VS Code | 此前报告 2.53 / 3.14.4 / 1.142 | 记录已有信息，不作为所有项目依赖兼容的证明 |
-| GCC / GDB | 完整版本与调试结果待补 | C/C++ 完整验收仍待记录 |
+| GCC / GDB | C++ 包已编译、链接和运行；完整工具版本与 GDB 调试结果待补 | 不将节点启动视为已完成逐行调试 |
 | VMware 桌面集成 | 复制粘贴、拖放与显示适配待逐项验证 | 不从桌面截图推断这些功能已通过 |
 | 真实硬件与 GPU 资源 | 尚无机械臂、传感器、控制板或模型训练资源的完整记录 | 后续进入相应实验时核对 |
 
@@ -43,15 +43,16 @@
 3. 构建成功并不代表 ROS 2 已发现功能包。需要检查 ament 注册路径、`colcon list` 的类型与环境前缀。
 4. XML 依赖闭合标签错误会破坏包清单解析。本次修正 `<depend>rclpy</depend>` 后，包类型从普通 `(python)` 恢复为 `(ros.ament_python)`，重新构建并加载环境后运行成功。
 5. 源码、包配置和终端环境都需复核；重复构建不能替代检查完整报错。
+6. C++ 包经历了 `cmake../` 缺少空格、Lyrical 旧依赖宏不可用、`install(TARGET ...)` 关键字错误；改用 `target_link_libraries(cpp_node PRIVATE rclcpp::rclcpp)` 和 `install(TARGETS ...)` 后，工作空间构建及节点运行成功。
 
-原始画面与修改顺序见 [CHAPT2 排错记录](../CHAPT2/TROUBLESHOOTING.md)。
+原始画面与修改顺序见 [Python 排错记录](../CHAPT2/TROUBLESHOOTING.md)和 [C++ 构建与排错记录](../CHAPT2/CPP_NODE.md)。
 
 ## 后续方向与目标
 
 | 方向 | 下一项可验证成果 | 状态 |
 | --- | --- | --- |
 | ROS 2 基础通信 | 自建发布者与订阅者，记录消息类型、频率和实际输出 | 待完成 |
-| C++ 工程化 | 整理 `ament_cmake` 功能包并保存构建、启动及修改实验 | 待完成 |
+| C++ 工程化 | 同步新建 `demo_cpp_pkg` 的完整源码，再补充修改与通信实验 | 包构建、安装与启动已确认；源码归档待补 |
 | 机械臂基础 | TF2、URDF/Xacro、正逆运动学、关节与末端坐标关系 | 待完成 |
 | 机械臂操作 | 核对 MoveIt 2、ros2_control 与仿真环境兼容，完成抓取放置实验 | 待完成 |
 | 示教与模仿学习 | 检查图像、状态、动作、语言及时间戳，完成行为克隆或 ACT 基线 | 待完成 |

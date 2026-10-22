@@ -1,8 +1,8 @@
-# 第二章：ROS 2 节点与 Python 功能包
+# 第二章：ROS 2 C++ / Python 节点与功能包
 
-[返回仓库首页](../README.md) · [返回第一章](../CHAPT1/README.md) · [本章排错记录](TROUBLESHOOTING.md)
+[返回仓库首页](../README.md) · [返回第一章](../CHAPT1/README.md) · [Python 排错](TROUBLESHOOTING.md) · [C++ 构建、排错与运行](CPP_NODE.md)
 
-本章从直接运行 Python 节点开始，再把节点封装为 ROS 2 Python 功能包，通过 `colcon build` 构建并使用 `ros2 run` 启动。学习重点是理清源码目录、Python 导入入口、ROS 2 包注册和终端环境之间的关系。
+本章从直接运行节点开始，将 Python 与 C++ 节点封装为 ROS 2 功能包，通过 `colcon build` 构建并使用 `ros2 run` 启动。学习重点是源码目录、Python 导入入口、CMake 依赖与安装配置、ROS 2 包注册和终端环境之间的关系。
 
 ## 已完成的实验
 
@@ -15,6 +15,8 @@
 ![Python 功能包识别、构建与节点运行成功](images/python-node-success.png)
 
 黄色 `WARN` 是源码主动调用 `warning('你好')` 的结果，不能据此判断节点启动失败。日志打印一次之后，程序进入 `rclpy.spin(node)` 等待事件，不会自动重复打印。
+
+随后已完成 C++ 功能包的构建与运行：`colcon build` 显示 `demo_cpp_pkg`、`demo_python_pkg` 两个包完成，`ros2 pkg prefix demo_cpp_pkg` 返回工作空间安装前缀，`ros2 run demo_cpp_pkg cpp_node` 输出 `[cpp_node]: 你好`。详见 [C++ 实验、排错与成功截图](CPP_NODE.md)。
 
 ## 学习要点
 
@@ -36,11 +38,12 @@
 | [demo_python_pkg/resource/demo_python_pkg](demo_python_pkg/resource/demo_python_pkg) | 安装到 ament 索引的包标记文件，内容可以为空 |
 | [demo_python_pkg/demo_python_pkg/__init__.py](demo_python_pkg/demo_python_pkg/__init__.py) | 标记 Python 包 |
 | [demo_python_pkg/test/](demo_python_pkg/test/) | 创建功能包时生成的检查模板；本章不据此声称所有测试已通过 |
-| [ros2_cpp_node.cpp](ros2_cpp_node.cpp) | 使用 `rclcpp` 的 C++ 节点源码，当前未附运行验收截图 |
+| [ros2_cpp_node.cpp](ros2_cpp_node.cpp) | 早期独立 `rclcpp` 节点源码；本次运行的新包为 `demo_cpp_pkg`，完整包源码仍待同步 |
 | [CMakeLists.txt.back](CMakeLists.txt.back) | C++ 示例的 CMake 配置备份；并非 CMake 默认读取的活动配置文件 |
 | [TROUBLESHOOTING.md](TROUBLESHOOTING.md) | 从模块导入错误到包识别恢复的完整排错记录 |
+| [CPP_NODE.md](CPP_NODE.md) | C++ 包配置、编译、安装与 `ros2 run` 的完整排错和成功记录 |
 
-关键源码结构：
+当前已归档的源码结构（新建 `demo_cpp_pkg` 完整源码待同步）：
 
 ```text
 CHAPT2/
@@ -179,6 +182,6 @@ ROS 2 注册路径：
 
 ## 已知限制与下一步
 
-Python 功能包已由用户的 Ubuntu 终端运行截图确认启动成功；本次仓库整理不等同于在其他系统重新验证 ROS 2 环境。C++ 节点目前仅保留源码和 CMake 备份，尚未整理为独立 `ament_cmake` 功能包，也没有对应运行成功截图。
+Python 与 C++ 功能包均已有学习者 Ubuntu 终端的构建、发现和启动证据，C++ 过程见 [CPP_NODE.md](CPP_NODE.md)。本次仓库整理未在其他系统重复运行 ROS 2。仓库已有早期 C++ 源码与配置备份，新建 `demo_cpp_pkg` 的完整源文件仍待同步；不能据此声称新克隆仓库已能复现该 C++ 包。
 
 节点示例还没有话题通信、服务、动作、机械臂接口或 VLA 推理。下一步先完成 Python/C++ 节点的发布与订阅练习，再连接机器人描述、仿真、机械臂控制和具身智能方向。

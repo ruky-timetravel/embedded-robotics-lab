@@ -7,7 +7,7 @@
 | 章节 | 内容与材料 | 当前证据 |
 | --- | --- | --- |
 | [CHAPT1：Ubuntu、编程与 ROS 2 初体验](../../CHAPT1/README.md) | C/C++、Python、CMake；[小海龟实验](../../CHAPT1/TURTLESIM.md)；[Ubuntu 截图](../../CHAPT1/EVIDENCE.md)；[排错记录](../../CHAPT1/TROUBLESHOOTING.md) | 已看到 TurtleSim 窗口与节点图；保留 CMake 拼写错误截图，尚未补充当前源码完整构建验收截图 |
-| [CHAPT2：节点与 Python 功能包](../../CHAPT2/README.md) | `rclpy`、日志、包目录、入口与 `colcon`；[排错过程和截图](../../CHAPT2/TROUBLESHOOTING.md) | `ros.ament_python` 识别、构建成功及 `ros2 run` 的 INFO/WARN 输出已由终端截图确认；C++ 节点仅有源码 |
+| [CHAPT2：C++ / Python 节点与功能包](../../CHAPT2/README.md) | `rclpy`、`rclcpp`、日志、包目录、入口、CMake 与 `colcon`；[Python 排错](../../CHAPT2/TROUBLESHOOTING.md) · [C++ 排错与截图](../../CHAPT2/CPP_NODE.md) | Python 包识别与启动已确认；C++ 包也已编译、安装并通过 `ros2 run` 打印日志，新包完整源码待同步 |
 
 ## 从当前结果继续
 
@@ -18,7 +18,7 @@ package.xml 与 setup.py → colcon build → source install/setup.bash
 → ros2 run demo_python_pkg python_node → INFO/WARN 日志
 ```
 
-这一结果验证的是节点启动和日志输出。后续先补齐 C++ 功能包与节点运行记录，再完成发布/订阅、服务、参数和 Launch 练习。TurtleSim 的运动与消息对应关系仍需要保存实际消息样本和自己的解释。
+C++ 包也已完成 `colcon build`、包前缀查询与 `ros2 run demo_cpp_pkg cpp_node`，过程见 [C++ 实验记录](../../CHAPT2/CPP_NODE.md)。这些结果验证节点启动和日志输出。后续同步新 C++ 包源码，再完成发布/订阅、服务、参数和 Launch 练习。TurtleSim 的运动与消息对应关系仍需要保存实际消息样本和自己的解释。
 
 - [总体进度与证据](../progress.md)
 - [ROS 2、机械臂、具身智能、VLA 与 π0.7 方向目标](roadmap.md)
